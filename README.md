@@ -1,2 +1,8 @@
-// Futuree.io Codebase
+# Futuree.io Codebase
+
+## Techstack 
+- TypeScript
+- NodeJS
+- Websocket
+- ExpressJS
 
