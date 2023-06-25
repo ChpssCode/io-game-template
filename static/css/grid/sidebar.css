@@ -1,0 +1,15 @@
+#top_sidebar {
+  grid-area: top_sidebar;
+}
+
+#left_sidebar {
+  grid-area: left_sidebar;
+}
+
+#right_sidebar {
+  grid-area: right_sidebar;
+}
+
+#bottom_sidebar {
+  grid-area: bottom_sidebar;
+}

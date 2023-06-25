@@ -1,0 +1,13 @@
+body {
+  background-color: #171717;
+  margin: 0;
+}
+
+label {
+  color: var(--color-ui-foreground);
+}
+
+button, input, select {
+  color: var(--color-ui-foreground);
+  background-color: var(--color-ui-background);
+}

@@ -1,0 +1,4 @@
+#spacerAboveHotbarBelowInventory {
+  grid-area: spacer1;
+  background-color: var(--color-separator-background);
+}

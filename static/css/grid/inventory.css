@@ -1,0 +1,29 @@
+#inventory {
+  grid-area: inv;
+  background-color: var(--color-inventory-background);
+  overflow-y: scroll; /* Show vertical scrollbar */
+  
+  /*
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: 15% 5%;
+  grid-template-areas:
+    "left_sidebar invUI invUI invUI invUI invUI invUI invUI invUI invUI invUI right_sidebar"
+    "left_sidebar inv inv inv inv inv inv inv inv inv inv right_sidebar"
+  */
+}
+
+.close_inventory_ui {
+  float: right;
+}
+
+.inventoryItem {
+  border: 1px solid;
+  margin: 3px;
+  border-color: var(--color-inventory-border);
+}
+
+#inventoryUI {
+  grid-area: invUI;
+  background-color: black;
+}

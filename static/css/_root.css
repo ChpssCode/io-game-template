@@ -1,0 +1,17 @@
+:root {
+  --color-hotbar-outline-border:   #7e7567; /* done */
+  --color-inventory-background:    #494f52; /* done */
+  --color-hotbar-background:       #222222; /* done but doesnt do anything since image */
+  --color-inspector-background:    #60686c; /* done */
+  --color-separator-background:    #000000; /* done */
+  --color-close-button-background: #103041; /* done */
+  /*
+  --color-scrollbar:               #242729;
+  */
+  --color-inventory-border:        #8c8273; /* done */
+
+  --color-body:                    #171717; /* done */
+  --color-ui-background:           #181a1b; /* done */
+  --color-ui-foreground:           #FFFFFF; /* done */
+  --color-ui-border:               #736b5e; /* done */
+}
