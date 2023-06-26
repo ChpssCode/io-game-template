@@ -1,5 +1,5 @@
 import WebSocket from 'ws';
-import { BufferReader } from '../BinaryUtils';
+import { BufferReader } from '../BufferUtils';
 import { player_schema } from '../schemas';
 
 const wss = new WebSocket.Server({ port: 8081 });
@@ -10,10 +10,9 @@ wss.on("connection", ws => {
     ws.binaryType = "arraybuffer"
 
     ws.on('message', (data) => {
-        console.log("Message Sent!")
         if ( data instanceof ArrayBuffer ) {
             const bufReader = new BufferReader();
-             bufReader.readFrom(data);
+            bufReader.readFrom(data);
 
              try {
              player_schema.validate(bufReader);

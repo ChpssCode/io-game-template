@@ -1,4 +1,4 @@
-import { BinaryTypes, BufferReader, BufferSchema, BufferWriter, SchemaCollection } from "../BinaryUtils";
+import { BinaryTypes, BufferReader, BufferSchema, BufferWriter, SchemaCollection } from "../BufferUtils";
 import { player_schema } from "../schemas";
 
 export const ws = new WebSocket(`ws://localhost:${8081}`);

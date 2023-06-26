@@ -30,7 +30,7 @@ export class BufferWriter {
 	static F32Array = new Float32Array;
 	static U8Array = new Uint8Array(BufferWriter.F32Array.buffer);
 
-	constructor(bufferSize: number = 1024) {
+	constructor(bufferSize: number = 2028) {
 		this.arrayBuffer = new ArrayBuffer(bufferSize);
 		this.byteView = new Uint8Array(this.arrayBuffer);
 	}
