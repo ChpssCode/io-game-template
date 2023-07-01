@@ -34,7 +34,7 @@ module.exports = {
         }),
         new CopyWebpackPlugin({
             patterns: [
-                { from: "static", to: "" },
+                { from: "static", to: "", noErrorOnMissing: true },
             ]
         }),
         /*new TerserPlugin({

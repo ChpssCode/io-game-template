@@ -1,6 +1,6 @@
 import WebSocket from 'ws';
-import { BufferReader } from '../BufferUtils';
-import { player_schema } from '../schemas';
+import { BufferReader } from '../BinaryUtils';
+import { spawn_schema } from '../Schemas';
 
 const wss = new WebSocket.Server({ port: 8081 });
 
@@ -10,21 +10,22 @@ wss.on("connection", ws => {
     ws.binaryType = "arraybuffer"
 
     ws.on('message', (data) => {
-        if ( data instanceof ArrayBuffer ) {
+        if(data instanceof ArrayBuffer) {
             const bufReader = new BufferReader();
             bufReader.readFrom(data);
 
-             try {
-             player_schema.validate(bufReader);
-             player_schema.validate(bufReader);
-             } catch (err) {
-             // Do something with the error
+            try {
+             spawn_schema.validate(bufReader);
+            } catch (err) {
+            // Do something with the error
             console.log("Error validating Buffer schema: " + err);
             }
 
-            const [firstVal, secondVal, thirdVal] = player_schema.readData(bufReader);
 
-            console.log(thirdVal);
+        // read the data from the schema...
+        const [firstVal, secondVal, thirdVal] = spawn_schema.readData(bufReader);
+
+        console.log(thirdVal)
         }
     });
 

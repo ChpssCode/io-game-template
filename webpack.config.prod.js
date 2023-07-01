@@ -27,7 +27,6 @@ module.exports = {
                 }
             }
         ]
-        esModuleInterop
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -35,7 +34,7 @@ module.exports = {
         }),
         new CopyWebpackPlugin({
             patterns: [
-                { from: "static", to: "" },
+                { from: "static", to: "", noErrorOnMissing: true},
             ]
         }),
     ],
