@@ -1,6 +1,16 @@
 import WebSocket from 'ws';
 import { BufferReader } from '../BinaryUtils';
-import { spawn_schema } from '../Schemas';
+import { addPlayerSchema } from '../packetSchemas';
+import { ECSworld } from './world';
+import { addEntity, addComponent, defineComponent, Types } from 'bitecs';
+import { COMP_entityInfo } from '../Components';
+import { ENTITY } from '../Config';
+import { CommCode } from '../Config';
+
+const Position = defineComponent({
+    x: Types.f32, 
+    y: Types.f32
+})
 
 const wss = new WebSocket.Server({ port: 8081 });
 
@@ -11,21 +21,31 @@ wss.on("connection", ws => {
 
     ws.on('message', (data) => {
         if(data instanceof ArrayBuffer) {
-            const bufReader = new BufferReader();
-            bufReader.readFrom(data);
+        const bufReader = new BufferReader();
+        bufReader.readFrom(data);
 
-            try {
-             spawn_schema.validate(bufReader);
-            } catch (err) {
-            // Do something with the error
-            console.log("Error validating Buffer schema: " + err);
+        let commcode = bufReader.readU8()
+
+        switch(commcode) {
+            case CommCode.addPlayer: {
+                let eid = addEntity(ECSworld)
+                addComponent(ECSworld, COMP_entityInfo, eid)
+
+                COMP_entityInfo.type[eid] = ENTITY.PLAYER;
+                COMP_entityInfo.id[eid] = eid;
+
+                addComponent(ECSworld, Position, eid)
+
+                console.log("Player joined the game!")
+
+                Position.x[eid] = bufReader.readU8();
+                Position.y[eid] = 0;
+
+                console.log(bufReader.readUInt32())
+                break;
             }
+        }
 
-
-        // read the data from the schema...
-        const [firstVal, secondVal, thirdVal] = spawn_schema.readData(bufReader);
-
-        console.log(thirdVal)
         }
     });
 

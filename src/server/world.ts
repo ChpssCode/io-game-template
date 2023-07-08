@@ -1,3 +1,3 @@
 import { createWorld } from 'bitecs'
 
-export const world = createWorld();
+export const ECSworld = createWorld();

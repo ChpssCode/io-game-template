@@ -8,12 +8,14 @@ interface BufferSchemaOptions {
 export const BinaryTypes = {
 	"u8": 0,
 	"u16": 1,
-	"str": 2,
+	"u32": 2,
+	"str": 3,
 };
 
 export const ByteSize = {
 	[BinaryTypes.u8]: 1,
 	[BinaryTypes.u16]: 2,
+	[BinaryTypes.u32]: 4,
 };
 
 const DEBUG = false;
@@ -25,13 +27,15 @@ const assert = (condition: boolean, err: string) => {
 export class BufferWriter {
 	byteView: Uint8Array;
 	arrayBuffer: ArrayBuffer;
+	dataView: any;
 	offset: number = 0;
+	bufferSize: number = 2028;
 
 	static F32Array = new Float32Array;
 	static U8Array = new Uint8Array(BufferWriter.F32Array.buffer);
 
-	constructor(bufferSize: number = 1024) {
-		this.arrayBuffer = new ArrayBuffer(bufferSize);
+	constructor() {
+		this.arrayBuffer = new ArrayBuffer(this.bufferSize);
 		this.byteView = new Uint8Array(this.arrayBuffer);
 	}
 
@@ -62,6 +66,21 @@ export class BufferWriter {
 		this.byteView[this.offset++] = ((u16 >> 8) & 0xff);
 	}
 
+    writeU32(u32: number): void {
+		if (DEBUG) assert(
+			(Number.isInteger(u32) && (u32 >= 0 && u32 <= (1 << 16) - 1)),
+			`invalid u32 provided: ${u32}`
+		);
+
+		if (DEBUG) assert(this.offset + 3 < this.maxSize(), `Writing u32 out of bounds ab[${this.offset}]`)
+
+		this.byteView[this.offset++] = u32 & 255;
+		this.byteView[this.offset++] = (u32 >> 8) & 255;
+		this.byteView[this.offset++] = (u32 >> 16) & 255;
+		this.byteView[this.offset++] = (u32 >> 24) & 255;
+	}
+
+
 	writeString(str: string) {
 		const len = str.length;
 		this.writeU8(len);
@@ -78,6 +97,7 @@ export class BufferReader {
 	offset: number = 0;
 	bytes: Uint8Array = new Uint8Array();
 
+
 	size(): number {
 		return this.bytes.length;
 	}
@@ -93,8 +113,14 @@ export class BufferReader {
 	}
 
 	readU16(): number {
-		return this.bytes[this.offset++] | (this.bytes[this.offset++] << 8);
+	return this.bytes[this.offset++] | (this.bytes[this.offset++] << 8);
 	}
+
+	readUInt32(): number {
+	if ((this.offset + 3) > this.bytes.byteLength) console.error(`Offset out of buffer, ${this.offset}`, this.bytes);
+
+	return this.bytes[this.offset++] | (this.bytes[this.offset++] << 8) + (this.bytes[this.offset++] << 16) + (this.bytes[this.offset++] << 24);
+    };
 
 	// TODO, add support for utf16
 	readShortStr(): string {
@@ -152,6 +178,9 @@ export class BufferSchema {
 						case BinaryTypes.str:
 							arr.push(bufferReader.readShortStr());
 							break;
+						case BinaryTypes.u32:
+							arr.push(bufferReader.readUInt32());
+							break;
 						default:
 							throw "Schema::readData unknown BinaryType: " + elementType;
 					}
@@ -169,6 +198,9 @@ export class BufferSchema {
 					case BinaryTypes.str:
 						this.returnData[i] = bufferReader.readShortStr();
 						break;
+                    case BinaryTypes.u32:
+						this.returnData[i] = bufferReader.readUInt32();
+					break;
 					default:
 						throw "Schema::readData unknown BinaryType: " + elementType;
 				}
@@ -211,6 +243,9 @@ export class BufferSchema {
 						// ie offset += len * 2
 						const len = bufferReader.bytes[offset++];
 						offset += len;
+						break;
+					case BinaryTypes.u32:
+						offset += 3;
 						break;
 					default:
 						throw "Schema::validate unknown BinaryType: " + elementType;

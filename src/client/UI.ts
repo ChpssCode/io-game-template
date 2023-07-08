@@ -2,6 +2,7 @@ const menu = <HTMLElement>(document.getElementById("front"));
 import { BufferWriter } from "../BinaryUtils";
 import { ws } from "./socket";
 const usernameInput = document.getElementById("username-input");
+import { CommCode } from "../Config";
 
 export function showMenu(){
     menu.style.display = "flex";
@@ -16,13 +17,16 @@ usernameInput.addEventListener("keydown", (e: KeyboardEvent) => {
     if(e.code === "Enter") {
            console.log("Clicked")
            const bufWriter = new BufferWriter();
-           bufWriter.writeU8(123)
-           bufWriter.writeU16(1234)
-           bufWriter.writeString((<HTMLInputElement>usernameInput).value);
+           bufWriter.writeU8(CommCode.addPlayer)
+           bufWriter.writeU8(10);
+           bufWriter.writeU32(10);
+
+           console.log(CommCode.addEntity)
 
            const bytes = bufWriter.getBytes();
 
            ws.send(bytes)
+           hideMenu();
     }
 })
 }
