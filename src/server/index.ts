@@ -1,16 +1,11 @@
 import WebSocket from 'ws';
-import { BufferReader } from '../BinaryUtils';
+import { BufferReader, BufferWriter } from '../BinaryUtils';
 import { addPlayerSchema } from '../packetSchemas';
 import { ECSworld } from './world';
 import { addEntity, addComponent, defineComponent, Types } from 'bitecs';
-import { COMP_entityInfo } from '../Components';
-import { ENTITY } from '../Config';
+import { COMP_entityInfo, COMP_position } from '../Components';
+import { Controls, ENTITY } from '../Config';
 import { CommCode } from '../Config';
-
-const Position = defineComponent({
-    x: Types.f32, 
-    y: Types.f32
-})
 
 const wss = new WebSocket.Server({ port: 8081 });
 
@@ -34,14 +29,22 @@ wss.on("connection", ws => {
                 COMP_entityInfo.type[eid] = ENTITY.PLAYER;
                 COMP_entityInfo.id[eid] = eid;
 
-                addComponent(ECSworld, Position, eid)
+                addComponent(ECSworld, COMP_position, eid)
 
                 console.log("Player joined the game!")
 
-                Position.x[eid] = bufReader.readU8();
-                Position.y[eid] = 0;
+                COMP_position.x[eid] = bufReader.readU8();
+                COMP_position.y[eid] = 0;
 
                 console.log(bufReader.readUInt32())
+                break;
+            }
+            case CommCode.keyDown: {
+                if(bufReader.readU8() === Controls.UP) {
+                    const bufWriter  = new BufferWriter();
+                    bufWriter.writeU32(1)
+                    ws.send(bufWriter.getBytes)
+                }
                 break;
             }
         }

@@ -4,7 +4,7 @@ export enum CommCode {
     updateEntity,
     removeEntity,
     respawn,
-    keyboard,
+    keyDown,
     handshake,
     mouse,
     mouseDown,
@@ -28,3 +28,8 @@ export enum ENTITY {
     WALL = 2,
     COIN = 3,
 }
+
+export const gridSize = 150 * 2;
+
+export const mapWidth = 19 * gridSize;//3000;
+export const mapHeight = 19 * gridSize;//3000;
