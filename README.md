@@ -1,8 +1,7 @@
-# Futuree.io Codebase
-The official codebase of the futuree.io game.
+# Io Game Template
 
 ## About
-Attempted my own rendition of a .io game, but thought it best to instead contribute to suroi.io. But who knows, maybe I will come back in the future? Also I would say it has a pretty good setup for anyone looking for a simple baseline to build their own little .io game off of. :D
+Attempted my own rendition of a .io game, but thought it best to instead to contribute to another similaie surviv.il remake project called suroi.io, but who knows, maybe I will come back to finish my game in the future? Also I would say it has a pretty good setup for anyone looking for a simple baseline to build their own little .io game off of. :D
 
 ## Techstack 
 - TypeScript
